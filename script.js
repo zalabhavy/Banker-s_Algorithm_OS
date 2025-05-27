@@ -1,208 +1,214 @@
-function reset()
-{
-    for(var i=1; i<=5; i++)
-    {
-      for(var j=1; j<=3; j++)
-      {
-        document.getElementById('a'+i+j).value = '';
-        document.getElementById('m'+i+j).value = '';
-        document.getElementById('n'+i+j).value = '';
-      }
-      document.getElementById('p'+i).value = '';
+// Reset all input and output fields
+function reset() {
+  // Clear allocation, maximum, need, and safe-sequence fields
+  for (let p = 1; p <= 5; p++) {
+    for (let r = 1; r <= 3; r++) {
+      document.getElementById(`a${p}${r}`).value = ''; //allocation
+      document.getElementById(`m${p}${r}`).value = ''; //maximume 
+      document.getElementById(`n${p}${r}`).value = ''; //need 
     }
-    document.getElementById('av11').value = '';
-    document.getElementById('av12').value = '';
-    document.getElementById('av13').value = '';
-    document.getElementById('resourceA').value = '';
-    document.getElementById('resourceB').value = '';
-    document.getElementById('resourceC').value = '';
-    document.body.style.backgroundColor = "#ffffff";
+    document.getElementById(`p${p}`).value = '';
   }
-  
-  function example()
-  {
-    sam = [[0,1,0],
-          [2,0,0],
-          [3,0,2],
-          [2,1,1],
-          [0,0,2]];
-  
-    max = [[7,5,3],
-          [3,2,2],
-          [9,0,2],
-          [2,2,2],
-          [4,3,3]];
-    for(var i=1; i<=5; i++)
-    {
-      for(var j=1; j<=3; j++)
-      {
-        document.getElementById('a'+i+j).value = sam[i-1][j-1];
-        document.getElementById('m'+i+j).value = max[i-1][j-1];
-      }
-    }
-    document.getElementById('resourceA').value = 10;
-    document.getElementById('resourceB').value = 5;
-    document.getElementById('resourceC').value = 7;
-  }
-  
-  
-  
-  function find_avai()
-  {
-    var a = document.getElementById('resourceA').value;
-    var b = document.getElementById('resourceB').value;
-    var c = document.getElementById('resourceC').value;
-    var x = 0;
-    var y = 0;
-    var z = 0;
-    for(var i=1; i<=5; i++)
-    {
-        var x = x + parseInt(document.getElementById('a'+i+'1').value);
-        var y = y + parseInt(document.getElementById('a'+i+'2').value);
-        var z = z + parseInt(document.getElementById('a'+i+'3').value);
-    }
-    document.getElementById('av11').value = a-x;
-    document.getElementById('av12').value = b-y;
-    document.getElementById('av13').value = c-z;
-  }
-  
-  function find_need()
-  {
-    for(var i=1; i<=5; i++)
-    {
-      for(var j=1; j<=3; j++)
-      {
-        document.getElementById('n'+i+j).value = parseInt(document.getElementById('m'+i+j).value) - parseInt(document.getElementById('a'+i+j).value);
-      }
-    }
-  }
-  
-  
-  function run_algo() {
-  
-    var resourceA = parseInt(document.getElementById('resourceA').value);
-    var resourceB = parseInt(document.getElementById('resourceB').value);
-    var resourceC = parseInt(document.getElementById('resourceC').value);
-  
-    
-    find_avai();
-    find_need();
-    
-    var k = 1; // AVAILABLE
-    var q = 1; // PROCESS
-  
-    for (var j = 1; j <= 5; j++) {
-      x1 = parseInt(document.getElementById('av11').value);
-      x2 = parseInt(document.getElementById('av12').value);
-      x3 = parseInt(document.getElementById('av13').value);
-  
-      for (var i = k; i <= 5; i++) {
-        var ex1 = parseInt(document.getElementById('a' + i + '1').value);
-        var ex2 = parseInt(document.getElementById('a' + i + '2').value);
-        var ex3 = parseInt(document.getElementById('a' + i + '3').value);
-  
-        if (ex1 != 0 || ex2 != 0 || ex3 != 0) {
-          if (
-            x1 >= parseInt(document.getElementById('n' + i + '1').value) &&
-            x2 >= parseInt(document.getElementById('n' + i + '2').value) &&
-            x3 >= parseInt(document.getElementById('n' + i + '3').value)
-          ) {
-            document.getElementById('p' + q).value = 'P' + i;
-            document.getElementById('av11').value =
-              parseInt(document.getElementById('av11').value) +
-              parseInt(document.getElementById('a' + i + '1').value);
-            document.getElementById('av12').value =
-              parseInt(document.getElementById('av12').value) +
-              parseInt(document.getElementById('a' + i + '2').value);
-            document.getElementById('av13').value =
-              parseInt(document.getElementById('av13').value) +
-              parseInt(document.getElementById('a' + i + '3').value);
-            document.getElementById('a' + i + '1').value = '0';
-            document.getElementById('a' + i + '2').value = '0';
-            document.getElementById('a' + i + '3').value = '0';
-            k = i + 1;
-            if (k == 6) {
-              k = 1;
-            }
-            q = q + 1;
-            break;
-          }
-        }
-      }
-    }
-  
-    if (q != 6) {
-      // document.body.style.backgroundColor = 'red';
-      alert("Deadlock!!");
-    } else {
-      // document.body.style.backgroundColor = 'green';
-      alert("Safe!!");
-    }
-  }
-  
-  function req_res() 
-  {
 
-    
-    var processId = prompt("Enter Process ID (1-5):");
-    var requestA = parseInt(prompt("Enter requested amount of Resource A for Process P" + processId + ":"));
-    var requestB = parseInt(prompt("Enter requested amount of Resource B for Process P" + processId + ":"));
-    var requestC = parseInt(prompt("Enter requested amount of Resource C for Process P" + processId + ":"));
+  // Clear available and resource totals
+  ['av11', 'av12', 'av13', 'resourceA', 'resourceB', 'resourceC'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
 
-   
-    var availableA = parseInt(document.getElementById('av11').value);
-    var availableB = parseInt(document.getElementById('av12').value);
-    var availableC = parseInt(document.getElementById('av13').value);
+}
 
-   
-    var allocationMatrix = [
-        [],
-        [0, parseInt(document.getElementById('a11').value), parseInt(document.getElementById('a12').value), parseInt(document.getElementById('a13').value)],
-        [0, parseInt(document.getElementById('a21').value), parseInt(document.getElementById('a22').value), parseInt(document.getElementById('a23').value)],
-        [0, parseInt(document.getElementById('a31').value), parseInt(document.getElementById('a32').value), parseInt(document.getElementById('a33').value)],
-        [0, parseInt(document.getElementById('a41').value), parseInt(document.getElementById('a42').value), parseInt(document.getElementById('a43').value)],
-        [0, parseInt(document.getElementById('a51').value), parseInt(document.getElementById('a52').value), parseInt(document.getElementById('a53').value)]
+// Load the sample data into the form
+function example() {
+  const allocationSample = [
+    [0,1,0], [2,0,0], [3,0,2], [2,1,1], [0,0,2]
+  ];
+
+  const maxSample = [
+    [7,5,3], [3,2,2], [9,0,2], [2,2,2], [4,3,3]
+  ];
+
+  // Fill allocation and max matrices
+  for (let p = 1; p <= 5; p++) {
+    for (let r = 1; r <= 3; r++) {
+      document.getElementById(`a${p}${r}`).value = allocationSample[p-1][r-1];
+      document.getElementById(`m${p}${r}`).value = maxSample[p-1][r-1];
+    }
+  }
+
+  // Set total resources
+  document.getElementById('resourceA').value = 10;
+  document.getElementById('resourceB').value = 5;
+  document.getElementById('resourceC').value = 7;
+}
+
+function computeAvailable() {
+  //Get total resources from input fields
+  let totalA = +document.getElementById('resourceA').value || 0; //+'5' = 5 convert in intiger 
+  let totalB = +document.getElementById('resourceB').value || 0;
+  let totalC = +document.getElementById('resourceC').value || 0;
+
+  //Calculate total used resources
+  let usedA = 0;
+  let usedB = 0;
+  let usedC = 0;
+
+  for (let p = 1; p <= 5; p++) {
+    usedA += +document.getElementById(`a${p}1`).value || 0;
+    usedB += +document.getElementById(`a${p}2`).value || 0;
+    usedC += +document.getElementById(`a${p}3`).value || 0;
+  }
+
+  //Calculate available resources
+  let availableA = totalA - usedA;
+  let availableB = totalB - usedB;
+  let availableC = totalC - usedC;
+
+  //Update the available resource fields
+  document.getElementById('av11').value = availableA;
+  document.getElementById('av12').value = availableB;
+  document.getElementById('av13').value = availableC;
+}
+
+
+// Compute Need = Max - Allocation for each process
+function computeNeed() {
+  for (let p = 1; p <= 5; p++) {
+    for (let r = 1; r <= 3; r++) {
+      const maxVal = +document.getElementById(`m${p}${r}`).value || 0;
+      const allocVal = +document.getElementById(`a${p}${r}`).value || 0;
+      document.getElementById(`n${p}${r}`).value = maxVal - allocVal;
+    }
+  }
+}
+
+// Check safety of current state and display safe sequence if it exists
+function runSafetyCheck() {
+  computeAvailable();
+  computeNeed();
+
+  // Read matrices from the form
+  const avail = [
+    +document.getElementById('av11').value,
+    +document.getElementById('av12').value,
+    +document.getElementById('av13').value
+  ];
+
+  const alloc = [], need = [];
+  for (let p = 1; p <= 5; p++) {
+    alloc[p] = [
+      +document.getElementById(`a${p}1`).value,
+      +document.getElementById(`a${p}2`).value,
+      +document.getElementById(`a${p}3`).value
     ];
-
-    var maxMatrix = [
-        [],
-        [0, parseInt(document.getElementById('m11').value), parseInt(document.getElementById('m12').value), parseInt(document.getElementById('m13').value)],
-        [0, parseInt(document.getElementById('m21').value), parseInt(document.getElementById('m22').value), parseInt(document.getElementById('m23').value)],
-        [0, parseInt(document.getElementById('m31').value), parseInt(document.getElementById('m32').value), parseInt(document.getElementById('m33').value)],
-        [0, parseInt(document.getElementById('m41').value), parseInt(document.getElementById('m42').value), parseInt(document.getElementById('m43').value)],
-        [0, parseInt(document.getElementById('m51').value), parseInt(document.getElementById('m52').value), parseInt(document.getElementById('m53').value)]
+    need[p] = [
+      +document.getElementById(`n${p}1`).value,
+      +document.getElementById(`n${p}2`).value,
+      +document.getElementById(`n${p}3`).value
     ];
+  }
 
-    
-    if (requestA > maxMatrix[processId][1] || requestB > maxMatrix[processId][2] || requestC > maxMatrix[processId][3]) {
-        alert("Requested resources exceed the maximum claim of Process P" + processId + ".");
-        return;
+  const finish = Array(5).fill(false);
+  const safeSeq = [];
+  let work = avail.slice();
+
+  // Try to find a sequence where each process can finish
+  for (let count = 0; count < 5; count++) {
+    let found = false;
+
+    for (let p = 1; p <= 5; p++) {
+      if (!finish[p-1] &&
+         need[p][0] <= work[0] &&
+         need[p][1] <= work[1] &&
+         need[p][2] <= work[2]) {
+        // Process p can finish
+        work[0] += alloc[p][0];
+        work[1] += alloc[p][1];
+        work[2] += alloc[p][2];
+        finish[p-1] = true;
+        safeSeq.push(`P${p}`);
+        found = true;
+      }
     }
 
-   
-    if (requestA > availableA || requestB > availableB || requestC > availableC) {
-        alert("Insufficient available resources. Process P" + processId + " must wait.");
-        return;
+    if (!found) break; // No further processes can finish unsafe
+  }
+
+  // Display results
+  if (safeSeq.length === 5) {
+    for (let i = 0; i < safeSeq.length; i++) {
+      document.getElementById(`p${i+1}`).value = safeSeq[i];
     }
+    alert("System is in a SAFE state.");    
+  } else {
+    alert('System is in an UNSAFE (deadlock) state.');
+  }
+}
 
-   
-    availableA -= requestA;
-    availableB -= requestB;
-    availableC -= requestC;
+// Handle resource request by a specific process
+function requestResources() {
+  const p = parseInt(prompt('Process ID (1-5)?'));
+  const req = [
+    +prompt(`Request A for P${p}?`) || 0,
+    +prompt(`Request B for P${p}?`) || 0,
+    +prompt(`Request C for P${p}?`) || 0
+  ];
 
-    allocationMatrix[processId][1] += requestA;
-    allocationMatrix[processId][2] += requestB;
-    allocationMatrix[processId][3] += requestC;
+  // Recompute available and need
+  computeAvailable();
+  computeNeed();
 
-    
-    document.getElementById('av11').value = availableA;
-    document.getElementById('av12').value = availableB;
-    document.getElementById('av13').value = availableC;
+  const avail = [
+    +document.getElementById('av11').value,
+    +document.getElementById('av12').value,
+    +document.getElementById('av13').value
+  ];
+  const need = Array(6);
+  for (let i = 1; i <= 5; i++) {
+    need[i] = [
+      +document.getElementById(`n${i}1`).value,
+      +document.getElementById(`n${i}2`).value,
+      +document.getElementById(`n${i}3`).value
+    ];
+  }
 
-    
-    document.getElementById('a' + processId + '1').value = allocationMatrix[processId][1];
-    document.getElementById('a' + processId + '2').value = allocationMatrix[processId][2];
-    document.getElementById('a' + processId + '3').value = allocationMatrix[processId][3];
+  // Validate request
+  for (let r = 0; r < 3; r++) {
+    if (req[r] > need[p][r]) {
+      alert('Request exceeds maximum need.');
+      return;
+    }
+    if (req[r] > avail[r]) {
+      alert('Not enough resources available; must wait.');
+      return;
+    }
+  }
 
-    alert("Resources allocated successfully for Process P" + processId + ".");
+  // Provisional allocation
+  ['av11','av12','av13'].forEach((id, idx) => {
+    document.getElementById(id).value = avail[idx] - req[idx];
+  });
+  for (let r = 1; r <= 3; r++) {
+    const elem = document.getElementById(`a${p}${r}`);
+    elem.value = +elem.value + req[r-1];
+  }
+
+  // Check safety after the provisional allocation
+  computeNeed();
+  const safe = runSafetyCheck();
+
+  if (safe) {
+    alert('Request GRANTED; system remains safe.');
+  } else {
+    // Roll back original allocation
+    ['av11','av12','av13'].forEach((id, idx) => {
+      document.getElementById(id).value = avail[idx];
+    });
+    for (let r = 1; r <= 3; r++) {
+      const elem = document.getElementById(`a${p}${r}`);
+      elem.value = +elem.value - req[r-1];
+    }
+    computeNeed();
+
+    alert('Request Not GRANTED; system unsafe.');
+  }
 }
